@@ -6,10 +6,10 @@ function userCredentialsAreValid(email, password) {
   return email && email.includes('@') && password && password.trim().length > 5;
 }
 
-function userDetailsAreValid(email, password, name, street, postal, city) {
+function userDetailsAreValid(email, password, fullname, street, postal, city) {
   return (
     userCredentialsAreValid(email, password) &&
-    !isEmpty(name) &&
+    !isEmpty(fullname) &&
     !isEmpty(street) &&
     !isEmpty(postal) &&
     !isEmpty(city)
