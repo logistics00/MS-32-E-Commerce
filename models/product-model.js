@@ -8,7 +8,20 @@ class Product {
     this.description = productData.description;
     this.image = productData.image;
     this.imagePath = `product-data/images/${productData.image}`;
-    this.imageUrl = `/product/assets/images/${productData.image}`;
+    this.imageUrl = `/products/assets/images/${productData.image}`;
+    if (productData._id) {
+      this.id = productData._id.toString(); //,
+    }
+  }
+
+  static async findAll() {
+    const products = await db.getDb().collection('products').find().toArray();
+
+    // Transform an array of product-documents into an array of
+    // product-objects -> imagePath, imageUrl and id available
+    return products.map(function (productDocument) {
+      return new Product(productDocument);
+    });
   }
 
   async save() {
