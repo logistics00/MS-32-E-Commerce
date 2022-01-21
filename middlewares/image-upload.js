@@ -5,7 +5,7 @@ const upload = multer({
   storage: multer.diskStorage({
     destination: 'product-data/images',
     filename: function (req, file, cb) {
-      cb(null);
+      cb(null, uuid() + '-' + file.originalname);
     },
   }),
 });
