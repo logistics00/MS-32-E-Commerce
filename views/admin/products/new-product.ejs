@@ -7,7 +7,7 @@
       <main>
         <h1>Add New Product</h1>
         <%- include('includes/product-form', { submitPath: '/admin/products' , product: { title: '' , summary: '' ,
-          price: '' , description: '' , } }) %>
+          price: '' , description: '' }, imageRequired: true }) %>
       </main>
 
       <%- include('../../shared/includes/footer') %>
