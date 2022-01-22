@@ -66,11 +66,10 @@ async function deleteProduct(req, res, next) {
     product = await Product.findById(req.params.id);
     await product.remove();
   } catch (error) {
-    next(error);
-    return;
+    return next(error);
   }
 
-  res.redirect('/admin/products');
+  res.json({ message: 'Deleted product!' });
 }
 
 module.exports = {
