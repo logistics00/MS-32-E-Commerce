@@ -1,6 +1,8 @@
 const cartItemUpdateFormElements = document.querySelectorAll(
   '.cart-item-management'
 );
+const cartTotalPriceElement = document.getElementById('cart-total-price');
+const cartBadge = document.querySelector('.nav-items .badge');
 
 async function updateCartItem(event) {
   event.preventDefault();
@@ -14,7 +16,7 @@ async function updateCartItem(event) {
   let response;
   try {
     response = await fetch('/cart/items', {
-      methode: 'PATCH',
+      method: 'PATCH',
       body: JSON.stringify({
         productId: productId,
         quantity: quantity,
@@ -25,16 +27,31 @@ async function updateCartItem(event) {
       },
     });
   } catch (error) {
-    alert('Something went wrong!');
+    alert('Something went wrong! (cart-item-management[30])');
     return;
   }
 
   if (!response.ok) {
-    alert('Something went wrong!');
+    alert('Something went wrong! (cart-item-management[35])');
     return;
   }
 
   const responseData = await response.json();
+
+  // Remove product-line from screen when item-quantity was <= 0
+  if (responseData.updatedCartData.updatedItemPrice === 0) {
+    form.parentElement.parentElement.remove();
+  } else {
+    const cartItemTotalPriceElement =
+      form.parentElement.querySelector('.cart-item-price');
+    cartItemTotalPriceElement.textContent =
+      responseData.updatedCartData.updatedItemPrice.toFixed(2);
+  }
+
+  cartTotalPriceElement.textContent =
+    responseData.updatedCartData.newTotalPrice.toFixed(2);
+  cartBadge.textContent =
+    responseData.updatedCartData.newTotalQuantity.toFixed(2);
 }
 
 for (const formElement of cartItemUpdateFormElements) {
