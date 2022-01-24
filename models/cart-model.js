@@ -25,7 +25,7 @@ class Cart {
       }
     }
 
-    this.item.push(cartItem);
+    this.items.push(cartItem);
     this.totalQuantity++;
     this.totalPrice += product.price;
   }
