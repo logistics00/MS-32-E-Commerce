@@ -38,36 +38,34 @@ async function addOrder(req, res, next) {
   req.session.cart = null;
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: [
-      'card',
-    ]
-    line_items: [
-      {
+    payment_method_types: ['card'],
+    line_items: cart.items.map(function (item) {
+      return {
         // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
         price_data: {
           currency: 'eur',
           product_data: {
-            name: 'Dummy'
+            name: item.product.title,
           },
-          unit_amount_decimal: 10.99
-        }
-        quantity: 1,
-      },
-    ],
+          unit_amount: +item.product.price.toFixed(2) * 100,
+        },
+        quantity: item.quantity,
+      };
+    }),
     mode: 'payment',
-    success_url: `localhost:3000/success`,
-    cancel_url: `localhost:3000/cancel`,
+    success_url: `http://localhost:3000/orders/success`,
+    cancel_url: `http://localhost:3000/orders/failure`,
   });
 
   res.redirect(303, session.url);
 }
 
 function getSuccess(req, res) {
-  res.render('customer/orders/success')
+  res.render('customer/orders/success');
 }
 
 function getFailure(req, res) {
-  res.render('customer/orders/failure')
+  res.render('customer/orders/failure');
 }
 
 module.exports = {
